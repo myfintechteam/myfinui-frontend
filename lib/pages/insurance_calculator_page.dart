@@ -776,6 +776,8 @@ class _InsuranceCalculatorPageState extends State<InsuranceCalculatorPage> {
     final isMobile = screenWidth < 600;
     final isDesktop = screenWidth >= 900; // Assuming desktop for breadcrumbs
     final isLight = Theme.of(context).brightness == Brightness.light;
+    final backgroundColor =
+        isLight ? Colors.white : const Color(0xFF121212);
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -937,23 +939,7 @@ class _InsuranceCalculatorPageState extends State<InsuranceCalculatorPage> {
       ),
       body: Container(
         width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-            colors: isLight
-                ? [
-                    const Color(0xFFB3E5FC),
-                    const Color(0xFF81D4FA),
-                    const Color(0xFF0288D1),
-                  ]
-                : [
-                    const Color(0xFF18002F),
-                    const Color(0xFF2C2448),
-                    const Color(0xFF6966A7),
-                  ],
-          ),
-        ),
+        color: backgroundColor,
         child: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: isMobile ? 8 : 32,
