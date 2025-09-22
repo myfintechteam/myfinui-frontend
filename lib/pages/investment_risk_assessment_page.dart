@@ -195,31 +195,16 @@ class _InvestmentRiskAssessmentPageState
     final isWideWeb = width > 900;
     final theme = Theme.of(context);
     final brightness = theme.brightness;
-    final gradientColors = brightness == Brightness.light
-        ? [
-            const Color(0xFFB3EFCF),
-            const Color(0xFF81DFFA),
-            const Color(0xFF0294D1),
-          ]
-        : [
-            const Color(0xFF181A2F),
-            const Color(0xFF234248),
-            const Color(0xFF693AD1),
-          ];
+    final backgroundColor =
+        brightness == Brightness.light ? Colors.white : const Color(0xFF121212);
 
     return Scaffold(
-      backgroundColor: gradientColors[0],
+      backgroundColor: backgroundColor,
       body: Stack(
         children: [
           Positioned.fill(
             child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: gradientColors,
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-              ),
+              color: backgroundColor,
             ),
           ),
           SafeArea(
@@ -243,21 +228,29 @@ class _InvestmentRiskAssessmentPageState
                               children: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(context),
-                                  child: const Text(
+                                  child: Text(
                                     'Dashboard',
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(
+                                      color: brightness == Brightness.light
+                                          ? Colors.blue
+                                          : Colors.white,
+                                    ),
                                   ),
                                 ),
-                                const Icon(
+                                Icon(
                                   Icons.chevron_right,
                                   size: 16,
-                                  color: Colors.white,
+                                  color: brightness == Brightness.light
+                                      ? Colors.blue
+                                      : Colors.white,
                                 ),
-                                const Text(
+                                Text(
                                   'Investment Risk Assessment',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.white,
+                                    color: brightness == Brightness.light
+                                        ? Colors.black
+                                        : Colors.white,
                                   ),
                                 ),
                               ],
@@ -268,7 +261,9 @@ class _InvestmentRiskAssessmentPageState
                             Text(
                               'Question ${_currentQuestionIndex + 1} of ${_questions.length}',
                               style: theme.textTheme.titleLarge?.copyWith(
-                                color: Colors.white,
+                                color: brightness == Brightness.light
+                                    ? Colors.black
+                                    : Colors.white,
                               ),
                             ),
                             const SizedBox(height: 12),
@@ -281,7 +276,7 @@ class _InvestmentRiskAssessmentPageState
                                           : 0)) /
                                   _questions.length,
                               color: Colors.blueAccent,
-                              backgroundColor: Colors.white.withOpacity(0.3),
+                              backgroundColor: Colors.grey.withOpacity(0.3),
                               minHeight: 8,
                             ),
                             const SizedBox(height: 30),
@@ -348,7 +343,9 @@ class _InvestmentRiskAssessmentPageState
                             Text(
                               '${_selectedAnswers.where((e) => e != null).length} of ${_questions.length} answered',
                               style: theme.textTheme.bodySmall?.copyWith(
-                                color: Colors.white70,
+                                color: brightness == Brightness.light
+                                    ? Colors.grey[700]
+                                    : Colors.white70,
                               ),
                             ),
                           ],
