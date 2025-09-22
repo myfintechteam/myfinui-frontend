@@ -519,6 +519,8 @@ class _LoanCalculatorPageState extends State<LoanCalculatorPage> {
     final isMobile = width < 700;
     final isDesktop = width >= 900; // allow full width on large screens
     final isLight = Theme.of(context).brightness == Brightness.light;
+    final backgroundColor =
+        isLight ? Colors.white : const Color(0xFF121212);
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -662,23 +664,7 @@ class _LoanCalculatorPageState extends State<LoanCalculatorPage> {
             ),
           Expanded(
             child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: isLight
-                      ? [
-                          const Color(0xFFB3E5FC),
-                          const Color(0xFF81D4FA),
-                          const Color(0xFF0288D1),
-                        ]
-                      : [
-                          const Color(0xFF18002F),
-                          const Color(0xFF2C2448),
-                          const Color(0xFF6966A7),
-                        ],
-                ),
-              ),
+              color: backgroundColor,
               child: SafeArea(
                 child: SingleChildScrollView(
                   padding: EdgeInsets.symmetric(
