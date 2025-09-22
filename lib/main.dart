@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide(color: Colors.blue, width: 2.0),
+            borderSide: const BorderSide(color: Colors.blue, width: 2.0),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
@@ -82,11 +82,11 @@ class _MyAppState extends State<MyApp> {
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide(color: Colors.red, width: 2.0),
+            borderSide: const BorderSide(color: Colors.red, width: 2.0),
           ),
           focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide(color: Colors.red, width: 2.0),
+            borderSide: const BorderSide(color: Colors.red, width: 2.0),
           ),
           labelStyle: TextStyle(color: Colors.grey[700]),
           hintStyle: TextStyle(color: Colors.grey[500]),
@@ -134,7 +134,7 @@ class _MyAppState extends State<MyApp> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide(color: const Color(0xFF5E35B1), width: 2.0),
+            borderSide: const BorderSide(color: Color(0xFF5E35B1), width: 2.0),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
@@ -142,11 +142,11 @@ class _MyAppState extends State<MyApp> {
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide(color: Colors.red, width: 2.0),
+            borderSide: const BorderSide(color: Colors.red, width: 2.0),
           ),
           focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide(color: Colors.red, width: 2.0),
+            borderSide: const BorderSide(color: Colors.red, width: 2.0),
           ),
           labelStyle: TextStyle(color: Colors.grey[300]),
           hintStyle: TextStyle(color: Colors.grey[500]),
@@ -217,7 +217,7 @@ class _MyFinHomePageState extends State<MyFinHomePage> {
     },
   ];
 
-  Widget _breadcrumbItem(
+  Widget _buildTopBarItem(
     BuildContext context,
     String title,
     String route, {
@@ -228,36 +228,28 @@ class _MyFinHomePageState extends State<MyFinHomePage> {
         ? Theme.of(context).primaryColor
         : Theme.of(context).textTheme.bodyMedium?.color;
 
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        TextButton(
-          style: TextButton.styleFrom(
-            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            alignment: Alignment.centerLeft,
-          ),
-          onPressed: isCurrentRoute
-              ? null
-              : () {
-                  Navigator.pushNamed(context, route);
-                },
-          child: Text(
-            title,
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: isCurrentRoute ? FontWeight.bold : FontWeight.normal,
-              color: textColor,
-            ),
+    return Expanded(
+      child: TextButton(
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          alignment: Alignment.center,
+        ),
+        onPressed: isCurrentRoute
+            ? null
+            : () {
+                Navigator.pushNamed(context, route);
+              },
+        child: Text(
+          title,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: isCurrentRoute ? FontWeight.bold : FontWeight.normal,
+            color: textColor,
           ),
         ),
-        if (!isLast)
-          Icon(
-            Icons.chevron_right,
-            size: 18,
-            color: Theme.of(context).textTheme.bodySmall?.color,
-          ),
-      ],
+      ),
     );
   }
 
@@ -322,6 +314,16 @@ class _MyFinHomePageState extends State<MyFinHomePage> {
     );
   }
 
+  // NEW: A function to show the premium dialog
+  void _showPremiumDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const PremiumDialog();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -353,7 +355,7 @@ class _MyFinHomePageState extends State<MyFinHomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'MyFin',
+                  'MyFinns',
                   style: TextStyle(
                     fontSize: isSmallScreen ? 18 : 22,
                     fontWeight: FontWeight.bold,
@@ -401,6 +403,25 @@ class _MyFinHomePageState extends State<MyFinHomePage> {
             ),
             onPressed: widget.toggleTheme,
           ),
+          // NEW: Add the "Try Premium" button
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: ElevatedButton(
+              onPressed: () => _showPremiumDialog(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF6A5ACD),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              ),
+              child: const Text(
+                'Try Premium',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
           if (isDesktop)
             IconButton(
               icon: Icon(
@@ -443,7 +464,7 @@ class _MyFinHomePageState extends State<MyFinHomePage> {
                         ),
                         const SizedBox(height: 8),
                         const Text(
-                          'MyFin Dashboard',
+                          'MyFinns Dashboard',
                           style: TextStyle(color: Colors.white, fontSize: 24),
                         ),
                       ],
@@ -511,48 +532,26 @@ class _MyFinHomePageState extends State<MyFinHomePage> {
           if (isDesktop)
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 0),
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor.withOpacity(0.04),
-                border: Border(
-                  bottom: BorderSide(
-                    color: Theme.of(context).dividerColor.withOpacity(0.5),
-                    width: 2,
-                  ),
-                ),
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.grey[200]
+                  : Colors.grey[900],
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: _breadcrumbItems.map((item) {
-                  final int index = _breadcrumbItems.indexOf(item);
-                  return _breadcrumbItem(
+                  return _buildTopBarItem(
                     context,
                     item['title'] as String,
                     item['route'] as String,
-                    isLast: index == _breadcrumbItems.length - 1,
                   );
                 }).toList(),
               ),
             ),
           Expanded(
             child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: Theme.of(context).brightness == Brightness.light
-                      ? [
-                          const Color(0xFF0288D1),
-                          const Color(0xFFB3E5FC),
-                          const Color(0xFF81D4FA),
-                        ]
-                      : [
-                          const Color(0xFF1A002F),
-                          const Color(0xFF2C2448),
-                          const Color(0xFF6966A7),
-                        ],
-                ),
-              ),
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.white
+                  : const Color(0xFF1A0033),
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -597,7 +596,7 @@ class _MyFinHomePageState extends State<MyFinHomePage> {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'Welcome to MyFin',
+                        'Welcome to MyFinns',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: isSmallScreen ? 32 : 40,
@@ -700,11 +699,11 @@ class _MyFinHomePageState extends State<MyFinHomePage> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: crossAxisCount,
-                                      crossAxisSpacing: 8.0,
-                                      mainAxisSpacing: 8.0,
-                                      childAspectRatio: aspectRatio,
-                                    ),
+                                  crossAxisCount: crossAxisCount,
+                                  crossAxisSpacing: 8.0,
+                                  mainAxisSpacing: 8.0,
+                                  childAspectRatio: aspectRatio,
+                                ),
                                 itemCount: 4,
                                 itemBuilder: (context, index) {
                                   final List<Map<String, dynamic>> features = [
@@ -851,130 +850,130 @@ class _ProfileDialogState extends State<ProfileDialog> {
                   child: Center(child: CircularProgressIndicator()),
                 )
               : _errorMessage != null
-              ? SizedBox(
-                  height: 200,
-                  child: Center(
-                    child: Text(
-                      _errorMessage!,
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                  ),
-                )
-              : Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // Email at the top
-                    Text(
-                      _userProfile!['email_id'] ?? 'N/A',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).textTheme.bodyLarge?.color,
-                      ),
-                    ),
-                    const Divider(height: 20),
-                    // Profile photo
-                    CircleAvatar(
-                      radius: 30,
-                      backgroundColor: Theme.of(context).primaryColor,
-                      child: Text(
-                        (_userProfile!['first_name'] as String? ?? 'U')[0]
-                            .toUpperCase(),
-                        style: const TextStyle(
-                          fontSize: 40,
-                          color: Colors.white,
+                  ? SizedBox(
+                      height: 200,
+                      child: Center(
+                        child: Text(
+                          _errorMessage!,
+                          style: const TextStyle(color: Colors.red),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      'Hi, ${_userProfile!['first_name']}',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).textTheme.bodyLarge?.color,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    )
+                  : Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Expanded(
-                          child: OutlinedButton.icon(
-                            onPressed: _editProfile,
-                            icon: const Icon(Icons.edit_outlined),
-                            label: const Text('Edit Profile'),
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: Theme.of(
-                                context,
-                              ).textTheme.bodyLarge?.color,
-                              side: BorderSide(
-                                color: Theme.of(context).dividerColor,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 12),
+                        // Email at the top
+                        Text(
+                          _userProfile!['email_id'] ?? 'N/A',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
+                          ),
+                        ),
+                        const Divider(height: 20),
+                        // Profile photo
+                        CircleAvatar(
+                          radius: 30,
+                          backgroundColor: Theme.of(context).primaryColor,
+                          child: Text(
+                            (_userProfile!['first_name'] as String? ?? 'U')[0]
+                                .toUpperCase(),
+                            style: const TextStyle(
+                              fontSize: 40,
+                              color: Colors.white,
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          width: 10,
-                        ), // Add some space between buttons
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: _logout,
-                            icon: const Icon(Icons.logout),
-                            label: const Text('Logout'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                            ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'Hi, ${_userProfile!['first_name']}',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
                           ),
                         ),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                onPressed: _editProfile,
+                                icon: const Icon(Icons.edit_outlined),
+                                label: const Text('Edit Profile'),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: Theme.of(
+                                    context,
+                                  ).textTheme.bodyLarge?.color,
+                                  side: BorderSide(
+                                    color: Theme.of(context).dividerColor,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ), // Add some space between buttons
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: _logout,
+                                icon: const Icon(Icons.logout),
+                                label: const Text('Logout'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        // SizedBox(
+                        //   width: double.infinity,
+                        //   child: OutlinedButton.icon(
+                        //     onPressed: _editProfile,
+                        //     icon: const Icon(Icons.edit_outlined),
+                        //     label: const Text('Edit Profile'),
+                        //     style: OutlinedButton.styleFrom(
+                        //       foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
+                        //       side: BorderSide(color: Theme.of(context).dividerColor),
+                        //       shape: RoundedRectangleBorder(
+                        //         borderRadius: BorderRadius.circular(10),
+                        //       ),
+                        //       padding: const EdgeInsets.symmetric(vertical: 12),
+                        //     ),
+                        //   ),
+                        // ),
+                        // const SizedBox(height: 10),
+                        // // Logout button
+                        // SizedBox(
+                        //   width: double.infinity,
+                        //   child: ElevatedButton.icon(
+                        //     onPressed: _logout,
+                        //     icon: const Icon(Icons.logout),
+                        //     label: const Text('Logout'),
+                        //     style: ElevatedButton.styleFrom(
+                        //       backgroundColor: Colors.red,
+                        //       foregroundColor: Colors.white,
+                        //       shape: RoundedRectangleBorder(
+                        //         borderRadius: BorderRadius.circular(10),
+                        //       ),
+                        //       padding: const EdgeInsets.symmetric(vertical: 12),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
-                    // SizedBox(
-                    //   width: double.infinity,
-                    //   child: OutlinedButton.icon(
-                    //     onPressed: _editProfile,
-                    //     icon: const Icon(Icons.edit_outlined),
-                    //     label: const Text('Edit Profile'),
-                    //     style: OutlinedButton.styleFrom(
-                    //       foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
-                    //       side: BorderSide(color: Theme.of(context).dividerColor),
-                    //       shape: RoundedRectangleBorder(
-                    //         borderRadius: BorderRadius.circular(10),
-                    //       ),
-                    //       padding: const EdgeInsets.symmetric(vertical: 12),
-                    //     ),
-                    //   ),
-                    // ),
-                    // const SizedBox(height: 10),
-                    // // Logout button
-                    // SizedBox(
-                    //   width: double.infinity,
-                    //   child: ElevatedButton.icon(
-                    //     onPressed: _logout,
-                    //     icon: const Icon(Icons.logout),
-                    //     label: const Text('Logout'),
-                    //     style: ElevatedButton.styleFrom(
-                    //       backgroundColor: Colors.red,
-                    //       foregroundColor: Colors.white,
-                    //       shape: RoundedRectangleBorder(
-                    //         borderRadius: BorderRadius.circular(10),
-                    //       ),
-                    //       padding: const EdgeInsets.symmetric(vertical: 12),
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
-                ),
         ),
       ),
     );
@@ -1410,7 +1409,7 @@ class FinancialHealthDashboardSection extends StatelessWidget {
                       color: Theme.of(context).primaryColor,
                     ),
                   ),
-                  TextSpan(
+                  const TextSpan(
                     text: '/100',
                     style: TextStyle(fontSize: 18, color: Colors.grey),
                   ),
@@ -1853,6 +1852,121 @@ class AIPoweredRecommendationsSection extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+// NEW WIDGET: PremiumDialog
+class PremiumDialog extends StatelessWidget {
+  const PremiumDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color textColor = isDark ? Colors.white : Colors.black;
+
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      backgroundColor: Theme.of(context).cardColor,
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        width: 400,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Align(
+              alignment: Alignment.center,
+              child: Text(
+                'Benefits from using Premium',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Align(
+              alignment: Alignment.center,
+              child: Text(
+                'You will get 1yr premium for just ₹99',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            _buildBenefitItem(
+              context,
+              Icons.shield,
+              'Best Insurance Plan',
+              isDark,
+            ),
+            _buildBenefitItem(
+              context,
+              Icons.trending_up,
+              'Best Investment Plan',
+              isDark,
+            ),
+            _buildBenefitItem(
+              context,
+              Icons.attach_money,
+              'Get instant loan even if your CIBIL score is low',
+              isDark,
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  // TODO: Implement actual premium purchase logic
+                  Navigator.of(context).pop(); // Close the dialog
+                  // Navigate to a payment page or show a success message
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).primaryColor,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  'Get Premium Now',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBenefitItem(BuildContext context, IconData icon, String text, bool isDark) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: Theme.of(context).primaryColor, size: 24),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 16,
+                color: isDark ? Colors.white70 : Colors.black87,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
